@@ -1,7 +1,7 @@
 package com.bot.demo.controller;
 
 import com.bot.demo.service.TodoService;
-import com.bot.demo.vo.Todos;
+import com.bot.demo.vo.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ public class TodoController {
 
 
     @GetMapping("/{todoId}")
-    public Todos getTodoById(@PathVariable(value = "todoId") String todoId) {
+    public Todo getTodoById(@PathVariable(value = "todoId") String todoId) {
         return todoService.getTodoById(todoId);
     }
 
@@ -25,19 +25,19 @@ public class TodoController {
     }
 
     @PostMapping("")
-    public Todos insTodo(@RequestBody Todos todo) {
+    public Todo insTodo(@RequestBody Todo todo) {
 
         return todoService.insertTodo(todo);
     }
 
     @PatchMapping("")
-    public int updTodo(@RequestBody Todos todo) {
+    public int updTodo(@RequestBody Todo todo) {
         todoService.updateTodo(todo);
         return 1;
     }
 
     @DeleteMapping("")
-    public int delTodo(@RequestBody Todos todo) {
+    public int delTodo(@RequestBody Todo todo) {
         todoService.deleteTodo(todo);
         return 1;
     }

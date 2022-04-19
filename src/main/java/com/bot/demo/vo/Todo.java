@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Todos {
+public class Todo {
     @Id
     private String _id;
     private String content;
@@ -23,4 +23,7 @@ public class Todos {
     private Integer proceed;
     private LocalDateTime date;
     private Integer todoId;
+//    @Transient
+//    Pagination pagination;
+
 }

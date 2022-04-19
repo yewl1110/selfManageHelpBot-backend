@@ -1,7 +1,7 @@
 package com.bot.demo.service;
 
 import com.bot.demo.respository.TodosRepo;
-import com.bot.demo.vo.Todos;
+import com.bot.demo.vo.Todo;
 import com.bot.demo.vo.base.Pagination;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class TodoService {
     private final TodosRepo todosRepo;
     private final MongoTemplate mongoTemplate;
 
-    public Todos getTodoById(String todoId) {
-        Todos result = new Todos();
+    public Todo getTodoById(String todoId) {
+        Todo result = new Todo();
         try {
             result = Optional.ofNullable(todosRepo.findBy_id(todoId)).orElse(result);
         } catch(Exception e) {
@@ -46,7 +46,7 @@ public class TodoService {
             query.with(Sort.by(Sort.Direction.DESC, "date"));
             query.with(Pageable.ofSize(pagination.getPagePerCnt()).withPage(pagination.getPage()));
 
-            map.put("list", mongoTemplate.find(query, Todos.class));
+            map.put("list", mongoTemplate.find(query, Todo.class));
             map.put("pagination", pagination);
         } catch (Exception e) {
 
@@ -55,11 +55,11 @@ public class TodoService {
         return map;
     }
 
-    public Todos insertTodo(Todos todo) {
+    public Todo insertTodo(Todo todo) {
         return todosRepo.insert(todo);
     }
 
-    public void updateTodo(Todos todo) {
+    public void updateTodo(Todo todo) {
 //        db.todos.updateOne({todoId:1}, {$set:{isCompleted: true}})
         try {
             Query query = new Query(Criteria.where("_id").is(todo.get_id()));
@@ -77,13 +77,13 @@ public class TodoService {
                 }
             }
 
-            mongoTemplate.updateFirst(query, update, Todos.class);
+            mongoTemplate.updateFirst(query, update, Todo.class);
         } catch (Exception e) {
 
         }
     }
 
-    public void deleteTodo(Todos todo) {
+    public void deleteTodo(Todo todo) {
         todosRepo.deleteTodosBy_id(todo.get_id());
     }
 }
