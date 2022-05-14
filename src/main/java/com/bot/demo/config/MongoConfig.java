@@ -29,7 +29,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     public MongoClient mongoClient() {
-        final ConnectionString connectionString = new ConnectionString("mongodb://puddingii:LKEUyDLj2lG0CfHw@selfmanagebotcluster-shard-00-00.mvecp.mongodb.net:27017,selfmanagebotcluster-shard-00-01.mvecp.mongodb.net:27017,selfmanagebotcluster-shard-00-02.mvecp.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-yis6z3-shard-0&authSource=admin&retryWrites=true&w=majority");
+        final ConnectionString connectionString = new ConnectionString("mongodb://"+username+":"+password+"@selfmanagebotcluster-shard-00-00.mvecp.mongodb.net:27017,selfmanagebotcluster-shard-00-01.mvecp.mongodb.net:27017,selfmanagebotcluster-shard-00-02.mvecp.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-yis6z3-shard-0&authSource=admin&retryWrites=true&w=majority");
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyConnectionString(connectionString).build();
         return MongoClients.create(mongoClientSettings);
     }
