@@ -1,11 +1,14 @@
 package com.bot.demo.respository;
 
+import com.bot.demo.respository.custom.AccountBookRepository;
 import com.bot.demo.vo.AccountBook;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface AccountBooksRepo extends MongoRepository<AccountBook, String> {
-    AccountBook findBy_id(String _id);
-    AccountBook insert(AccountBook accountBook);
-    void deleteAccountBookBy_id(String string);
+import java.util.List;
+import java.util.Optional;
 
+public interface AccountBooksRepo extends MongoRepository<AccountBook, String>, AccountBookRepository {
+    Optional<AccountBook> findById(String id);
+    AccountBook insert(AccountBook accountBook);
+    void deleteAccountBookByAccountIdAndUserId(Integer aId, String uId);
 }
