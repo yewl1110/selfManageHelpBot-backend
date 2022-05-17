@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface AccountBooksRepo extends MongoRepository<AccountBook, String>, AccountBookRepository {
     Optional<AccountBook> findById(String id);
     AccountBook insert(AccountBook accountBook);
+    AccountBook findFirstByAccountIdAndUserId(Integer aId, String uId);
     void deleteAccountBookByAccountIdAndUserId(Integer aId, String uId);
 }

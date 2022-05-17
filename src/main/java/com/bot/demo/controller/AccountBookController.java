@@ -23,9 +23,9 @@ public class AccountBookController {
         return accountBookService.accountBookList(userId, startDate, endDate);
     }
 
-    @GetMapping("{objectId}")
-    AccountBook singleAccountBook(@PathVariable("objectId") String objectId) {
-        return accountBookService.get(objectId);
+    @GetMapping("{accountId}")
+    AccountBook singleAccountBook(@PathVariable("accountId") String accountId) {
+        return accountBookService.get(accountId);
     }
 
     @PostMapping("")

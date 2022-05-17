@@ -1,13 +1,13 @@
 package com.bot.demo.service;
 
 import com.bot.demo.respository.AccountBooksRepo;
-import com.bot.demo.respository.custom.AccountBookRepository;
-import com.bot.demo.respository.custom.AccountBookRepositoryImpl;
+import com.bot.demo.respository.CountersRepo;
 import com.bot.demo.vo.AccountBook;
+import com.bot.demo.vo.Counter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountBookService {
-    final AccountBooksRepo accountBookRepository;
+    private final AccountBooksRepo accountBookRepository;
+    private final CountersRepo countersRepository;
 
     public List<AccountBook> accountBookList(String userId, String startDate, String endDate) {
         List<AccountBook> result = new ArrayList<>();
@@ -31,8 +32,8 @@ public class AccountBookService {
         return result;
     }
 
-    public AccountBook get(String objectId) {
-        return accountBookRepository.findById(objectId).orElse(new AccountBook());
+    public AccountBook get(String accountId) {
+        return accountBookRepository.findById(accountId).orElse(new AccountBook());
     }
 
     public Map<String, Object> insert(AccountBook accountBook) {
@@ -40,6 +41,8 @@ public class AccountBookService {
         int code = 0;
 
         try {
+            Counter counter = countersRepository.sequence("AccountBook");
+            accountBook.setAccountId(counter.getSeq_value());
             accountBookRepository.insert(accountBook);
             code = 1;
         } catch (Exception e) {
@@ -88,8 +91,11 @@ public class AccountBookService {
         int code = 0;
 
         try {
-            accountBookRepository.deleteAccountBookByAccountIdAndUserId(accountBook.getAccountId(), accountBook.getUserId());
-            code = 1;
+            AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUserId(accountBook.getAccountId(), accountBook.getUserId());
+            if(!ObjectUtils.isEmpty(delCheck)){
+                accountBookRepository.deleteAccountBookByAccountIdAndUserId(accountBook.getAccountId(), accountBook.getUserId());
+                code = 1;
+            }
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         } finally {

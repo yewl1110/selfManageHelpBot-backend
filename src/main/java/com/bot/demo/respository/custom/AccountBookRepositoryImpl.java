@@ -1,5 +1,6 @@
 package com.bot.demo.respository.custom;
 
+import com.bot.demo.annotation.PatchIgnore;
 import com.bot.demo.vo.AccountBook;
 import com.bot.demo.vo.Todo;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,9 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
         try {
             Query query = new Query();
             query.with(Sort.by(Sort.Direction.DESC, "date"));
-            query.addCriteria(Criteria.where("userId").is(userId).where("date").gte(startDate).lte(endDate));
+            query.addCriteria(new Criteria().andOperator(
+               Criteria.where("userId").is(userId), Criteria.where("date").gte(startDate).lte(endDate)
+            ));
             result = mongoTemplate.find(query, AccountBook.class);
         } catch (Exception e) {
             log.error("{}",e.getMessage());
@@ -43,7 +46,7 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
         int result = 0;
 //        db.todos.updateOne({todoId:1}, {$set:{isCompleted: true}})
         try {
-            Query query = new Query(Criteria.where("_id").is(accountBook.getId()));
+            Query query = new Query(Criteria.where("accountId").is(accountBook.getAccountId()));
 
             Update update = new Update();
             Class<?> clazz = accountBook.getClass();
@@ -53,11 +56,11 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
                 String fieldName = f.getName();
                 String methodName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
                 Object o = clazz.getMethod(methodName).invoke(accountBook);
-                if(!ObjectUtils.isEmpty(o)) {
+                if(!ObjectUtils.isEmpty(o) && clazz.getDeclaredAnnotation(PatchIgnore.class) == null) {
                     update.set(fieldName, o);
                 }
             }
-            System.out.println(mongoTemplate.find(query, AccountBook.class));
+            mongoTemplate.find(query, AccountBook.class);
             mongoTemplate.updateFirst(query, update, AccountBook.class);
             result = 1;
         } catch (Exception e) {
