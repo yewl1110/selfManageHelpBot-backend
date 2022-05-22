@@ -38,12 +38,13 @@ public class AccountBookService {
 
     public Map<String, Object> insert(AccountBook accountBook) {
         Map<String, Object> result = new HashMap<>();
+        AccountBook insAccountBook = new AccountBook();
         int code = 0;
 
         try {
             Counter counter = countersRepository.sequence("AccountBook");
             accountBook.setAccountId(counter.getSeq_value());
-            accountBookRepository.insert(accountBook);
+            insAccountBook = accountBookRepository.insert(accountBook);
             code = 1;
         } catch (Exception e) {
             log.error("{}",e.getMessage());
@@ -57,6 +58,7 @@ public class AccountBookService {
             }
             result.put("code", code);
             result.put("msg", msg);
+            result.put("accountId", insAccountBook.getAccountId());
         }
         return result;
     }

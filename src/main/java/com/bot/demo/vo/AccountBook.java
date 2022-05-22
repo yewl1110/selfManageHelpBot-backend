@@ -1,6 +1,7 @@
 package com.bot.demo.vo;
 
 import com.bot.demo.annotation.PatchIgnore;
+import com.bot.demo.vo.type.FixedDuration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,5 @@ public class AccountBook {
     private String content;
     private LocalDate date;
     private Integer accountId;
+    private FixedDuration fixedDuration = FixedDuration.MONTH;
 }
