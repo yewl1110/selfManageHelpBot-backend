@@ -26,6 +26,7 @@ public class StudyService {
             Map<String, Object> map = new HashMap<>();
             map.put("date", date.plusDays(i));
             map.put("time", random.nextInt() % 20 + 20);
+            map.put("test", random.nextInt() % 20 + 20);
             list.add(map);
         }
 
