@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
+@Deprecated
 public enum FixedDuration {
     DAY("1d"), WEEK("1w"), MONTH("1m"), YEAR("1y");
     private final String value;

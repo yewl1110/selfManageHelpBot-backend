@@ -5,6 +5,7 @@ import com.bot.demo.vo.AccountBook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class AccountBookController {
     }
 
     @PostMapping("")
-    Map<String, Object> insert(@RequestBody AccountBook accountBook) {
+    Map<String, Object> insert(@Valid @RequestBody AccountBook accountBook) {
         return accountBookService.insert(accountBook);
     }
 
