@@ -49,7 +49,7 @@ public class TodoRepositoryImpl implements TodoRepository{
     public void updateTodo(Todo todo) {
 //        db.todos.updateOne({todoId:1}, {$set:{isCompleted: true}})
         try {
-            Query query = new Query(Criteria.where("_id").is(todo.get_id()));
+            Query query = new Query(Criteria.where("_id").is(todo.getId()));
 
             Update update = new Update();
             Class<?> clazz = todo.getClass();
