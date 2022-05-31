@@ -8,10 +8,11 @@ import com.bot.demo.vo.Counter;
 import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,9 @@ public class AccountBookService {
         List<AccountBook> result = new ArrayList<>();
         try {
             User user = usersRepository.findByUserId(userId);
-            result = accountBookRepository.getListByUserAndPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate), user);
+            if(!ObjectUtils.isEmpty(user)) {
+                result = accountBookRepository.getListByUserAndPeriod(DateTime.parse(startDate), DateTime.parse(endDate), user);
+            }
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         }
