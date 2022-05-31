@@ -38,3 +38,5 @@ out/
 
 ### local properties ###
 application-local.properties
+
+**/test/resources/**

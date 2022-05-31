@@ -3,9 +3,11 @@ package com.bot.demo.respository.custom;
 import com.bot.demo.annotation.PatchIgnore;
 import com.bot.demo.vo.AccountBook;
 import com.bot.demo.vo.Todo;
+import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,14 +26,14 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<AccountBook> getListByUserIdAndPeriod(LocalDate startDate, LocalDate endDate, String userId) {
+    public List<AccountBook> getListByUserAndPeriod(DateTime startDate, DateTime endDate, User user) {
         List<AccountBook> result = new ArrayList<>();
 
         try {
             Query query = new Query();
             query.with(Sort.by(Sort.Direction.DESC, "date"));
             query.addCriteria(new Criteria().andOperator(
-               Criteria.where("userId").is(userId), Criteria.where("date").gte(startDate).lte(endDate)
+               Criteria.where("user").is(user.getId()), Criteria.where("date").gte(startDate).lte(endDate)
             ));
             result = mongoTemplate.find(query, AccountBook.class);
         } catch (Exception e) {

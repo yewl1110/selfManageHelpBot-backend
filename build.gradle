@@ -41,16 +41,14 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.6.6'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.7.0'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 //    implementation 'javax.validation:validation-api:2.0.1.Final'
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
-
+    implementation 'joda-time:joda-time:2.10.14'
 
 }
 
-//tasks.named('test') {
-//    useJUnitPlatform()
-//}
+tasks.named('test') {
+    useJUnitPlatform()
+}

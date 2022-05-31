@@ -4,12 +4,14 @@ import com.bot.demo.annotation.PatchIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.thymeleaf.util.StringUtils;
 
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 
 
 @Document("accountbooks")
@@ -18,16 +20,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AccountBook {
     @Id
+    @Field(name="_id")
     @PatchIgnore
-    private String _id;
-    private String userId;
+    private ObjectId id;
+    private ObjectId user;
     private Integer amount;
     private Boolean isFixed;
     private String category;
     private String content;
-    private LocalDate date;
+    private DateTime date;
     private Integer accountId;
-//    private FixedDuration fixedDuration = FixedDuration.MONTH;
     @Pattern(regexp = "^\\d+[dwmy]$")
     private String fixedDuration = "1m";
 

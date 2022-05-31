@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -16,12 +19,22 @@ import java.util.List;
 @AllArgsConstructor
 public class Study {
     @Id
-    private String _id;
+    @Field(name="_id")
+    private ObjectId id;
     private String title;
-    //{ title: ‘제목’, content: ‘내용’ , date: Date.now, isSecret: false}
-//    private List<Object> commentList;
-    private String commentList;
-    private String startDate;
-    private String endDate;
+    private List<Comment> commentList;
+    private DateTime startDate;
+    private DateTime endDate;
     private Object owner;
+
+    @Data
+    class Comment{
+        @Id
+        @Field(name="_id")
+        private ObjectId id;
+        private String title;
+        private String comment;
+        private DateTime date;
+        private Boolean isSecret;
+    }
 }

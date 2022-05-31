@@ -3,6 +3,7 @@ package com.bot.demo.service;
 import com.bot.demo.respository.TodosRepo;
 import com.bot.demo.vo.Todo;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class TodoService {
     public Todo getTodoById(String todoId) {
         Todo result = new Todo();
         try {
-            result = Optional.ofNullable(todosRepo.findBy_id(todoId)).orElse(result);
+            result = todosRepo.findById(new ObjectId(todoId));
         } catch(Exception e) {
 
         }
@@ -37,6 +38,6 @@ public class TodoService {
     }
 
     public void deleteTodo(Todo todo) {
-        todosRepo.deleteTodosBy_id(todo.get_id());
+        todosRepo.deleteTodosById(todo.getId());
     }
 }

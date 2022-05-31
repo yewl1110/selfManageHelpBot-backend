@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("channelusergoals")
 @Data
@@ -15,7 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 public class ChannelUserGoal {
     @Id
-    private String _id;
+    @Field(name="_id")
+    private ObjectId id;
     private Channel channel;
     private User user;
     private int goalTime;

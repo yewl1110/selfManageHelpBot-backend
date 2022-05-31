@@ -2,8 +2,10 @@ package com.bot.demo.service;
 
 import com.bot.demo.respository.AccountBooksRepo;
 import com.bot.demo.respository.CountersRepo;
+import com.bot.demo.respository.UsersRepo;
 import com.bot.demo.vo.AccountBook;
 import com.bot.demo.vo.Counter;
+import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,13 @@ import java.util.Map;
 public class AccountBookService {
     private final AccountBooksRepo accountBookRepository;
     private final CountersRepo countersRepository;
+    private final UsersRepo usersRepository;
 
     public List<AccountBook> accountBookList(String userId, String startDate, String endDate) {
         List<AccountBook> result = new ArrayList<>();
         try {
-            result = accountBookRepository.getListByUserIdAndPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate), userId);
+            User user = usersRepository.findByUserId(userId);
+            result = accountBookRepository.getListByUserAndPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate), user);
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         }
@@ -93,9 +97,9 @@ public class AccountBookService {
         int code = 0;
 
         try {
-            AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUserId(accountBook.getAccountId(), accountBook.getUserId());
+            AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUser(accountBook.getAccountId(), accountBook.getUser());
             if(!ObjectUtils.isEmpty(delCheck)){
-                accountBookRepository.deleteAccountBookByAccountIdAndUserId(accountBook.getAccountId(), accountBook.getUserId());
+                accountBookRepository.deleteAccountBookByAccountIdAndUser(accountBook.getAccountId(), accountBook.getUser());
                 code = 1;
             }
         } catch (Exception e) {
