@@ -13,4 +13,5 @@ public interface AccountBooksRepo extends MongoRepository<AccountBook, String>, 
     AccountBook insert(AccountBook accountBook);
     AccountBook findFirstByAccountIdAndUser(Integer aId, ObjectId uId);
     void deleteAccountBookByAccountIdAndUser(Integer aId, ObjectId uId);
+    List<AccountBook> findAllByUserAndIsFixed(ObjectId userId, Boolean isFixed);
 }

@@ -11,5 +11,6 @@ import java.util.Map;
 
 public interface AccountBookRepository {
     List<AccountBook> getListByUserAndPeriod(DateTime startDate, DateTime endDate, User user);
+    List<AccountBook> getFixedListByIdList(List<ObjectId> id);
     int update(AccountBook accountBook);
 }

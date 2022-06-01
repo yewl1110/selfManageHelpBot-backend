@@ -2,13 +2,17 @@ package com.bot.demo.service;
 
 import com.bot.demo.respository.AccountBooksRepo;
 import com.bot.demo.respository.CountersRepo;
+import com.bot.demo.respository.StudiesRepo;
 import com.bot.demo.respository.UsersRepo;
 import com.bot.demo.vo.AccountBook;
 import com.bot.demo.vo.Counter;
 import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -35,6 +39,17 @@ public class AccountBookService {
             }
         } catch (Exception e) {
             log.error("{}",e.getMessage());
+        }
+        return result;
+    }
+
+    public List<AccountBook> fixedAccountBookList(String userId) {
+        List<AccountBook> result = new ArrayList<>();
+        try {
+            User user = usersRepository.findByUserId(userId);
+            result = accountBookRepository.findAllByUserAndIsFixed(user.getId(), true);
+        } catch (Exception e) {
+
         }
         return result;
     }

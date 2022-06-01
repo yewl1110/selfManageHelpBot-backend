@@ -44,6 +44,19 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
     }
 
     @Override
+    public List<AccountBook> getFixedListByIdList(List<ObjectId> id) {
+        List<AccountBook> list = new ArrayList<>();
+        try {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("id").in(id).and("isFixed").is(true));
+            list = mongoTemplate.find(query, AccountBook.class);
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+
+    @Override
     public int update(AccountBook accountBook) {
         int result = 0;
 //        db.todos.updateOne({todoId:1}, {$set:{isCompleted: true}})

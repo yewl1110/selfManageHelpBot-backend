@@ -43,4 +43,10 @@ public class AccountBookController {
     Map<String, Object> update(@RequestBody AccountBook accountBook) {
         return accountBookService.update(accountBook);
     }
+
+    @GetMapping("fixedList")
+    List<AccountBook> fixedList(@RequestParam("userId")String userId) {
+        return accountBookService.fixedAccountBookList(userId);
+    }
+
 }
