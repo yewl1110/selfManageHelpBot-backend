@@ -1,10 +1,20 @@
 package com.bot.demo;
 
+import com.bot.demo.respository.AccountBooksRepo;
 import com.bot.demo.respository.TodosRepo;
 import com.bot.demo.vo.Todo;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,14 +30,26 @@ class DemoApplicationTests {
     TodosRepo todosRepo;
     @Autowired
     MongoTemplate mongoTemplate;
+    @Autowired
+    AccountBooksRepo accountBooksRepo;
+    @Value("${spring.data.mongodb.username}")
+    private String username;
+    @Value("${spring.data.mongodb.password}")
+    private String password;
+    @Value("${spring.data.mongodb.database}")
+    private String database;
+
     @Test
     void contextLoads(){
-        Todo todo = new Todo();
-
-        System.out.println(todosRepo.findAll());
-//        System.out.println(todosRepo.update(todos));
-        System.out.println(todosRepo.findAll());
-        Assertions.assertTrue(false);
+        ConnectionString connectionString = new ConnectionString("mongodb://"+ username+":"+password+"@selfmanagebotcluster.mvecp.mongodb.net/?retryWrites=true&w=majority");
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .serverApi(ServerApi.builder()
+                        .version(ServerApiVersion.V1)
+                        .build())
+                .build();
+        MongoClient mongoClient = MongoClients.create(settings);
+        MongoDatabase database = mongoClient.getDatabase("myFirstDatabase");
     }
 
     @Test
@@ -53,7 +75,7 @@ class DemoApplicationTests {
     @Test
     public void methods() {
         Todo todo = new Todo();
-        todo.set_id("tmptmp");
+        todo.setId(new ObjectId());
         Class<?> c = todo.getClass();
         Field[] fields = c.getDeclaredFields();
         for(Field f:fields) {

@@ -1,5 +1,6 @@
 package com.bot.demo.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,17 +21,20 @@ import java.util.List;
 public class Study {
     @Id
     @Field(name="_id")
+    @JsonIgnore
     private ObjectId id;
     private String title;
     private List<Comment> commentList;
     private DateTime startDate;
     private DateTime endDate;
-    private Object owner;
+    @JsonIgnore
+    private ObjectId owner;
 
     @Data
     class Comment{
         @Id
         @Field(name="_id")
+        @JsonIgnore
         private ObjectId id;
         private String title;
         private String comment;

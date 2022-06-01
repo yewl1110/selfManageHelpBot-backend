@@ -1,9 +1,12 @@
 package com.bot.demo;
 
 import com.bot.demo.respository.StudiesRepo;
+import com.bot.demo.respository.UsersRepo;
 import com.bot.demo.service.AccountBookService;
+import com.bot.demo.vo.User;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +18,8 @@ public class StudyRepositoryTest {
     @Autowired
     StudiesRepo studiesRepo;
     @Autowired AccountBookService accountBookService;
+    @Autowired
+    UsersRepo usersRepository;
 
     @Test
     public void offsetDatetime() {
@@ -34,5 +39,18 @@ public class StudyRepositoryTest {
     @Test
     public void selectStudy() {
         System.out.println(studiesRepo.findFirstById(new ObjectId("6291c05ec140daaabc44f13b")));
+    }
+    @Test
+    @DisplayName("study repository에서 study list 가져오는 테스트")
+    public void selectStudyList() {
+        String userId = "gun4930";
+        String startDateStr = "2022-05-29";
+        int count = 7;
+
+        DateTime startDate = DateTime.parse(startDateStr);
+        DateTime endDate = startDate.plusDays(count);
+        User user = usersRepository.findByUserId(userId);
+
+        System.out.println(studiesRepo.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), startDate, endDate));
     }
 }
