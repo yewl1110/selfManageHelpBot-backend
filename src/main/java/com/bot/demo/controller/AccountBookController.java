@@ -35,8 +35,8 @@ public class AccountBookController {
     }
 
     @DeleteMapping("")
-    Map<String, Object> delete(@RequestBody AccountBook accountBook) {
-        return accountBookService.delete(accountBook);
+    Map<String, Object> delete(@RequestBody Map<String, Object> params) {
+        return accountBookService.delete(params);
     }
 
     @PatchMapping("")

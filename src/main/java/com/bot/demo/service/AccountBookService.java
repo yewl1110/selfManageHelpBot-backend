@@ -110,14 +110,17 @@ public class AccountBookService {
     }
 
 
-    public Map<String, Object> delete(AccountBook accountBook) {
+    public Map<String, Object> delete(Map<String, Object> params) {
         Map<String, Object> result = new HashMap<>();
         int code = 0;
 
         try {
-            AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUser(accountBook.getAccountId(), accountBook.getUser());
+            String userId = String.valueOf(params.get("userId"));
+            Integer accountId = (int)params.get("accountId");
+            User user = usersRepository.findByUserId(userId);
+            AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUser(accountId, user.getId());
             if(!ObjectUtils.isEmpty(delCheck)){
-                accountBookRepository.deleteAccountBookByAccountIdAndUser(accountBook.getAccountId(), accountBook.getUser());
+                accountBookRepository.deleteAccountBookByAccountIdAndUser(accountId, user.getId());
                 code = 1;
             }
         } catch (Exception e) {
