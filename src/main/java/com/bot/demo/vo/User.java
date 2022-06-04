@@ -1,5 +1,7 @@
 package com.bot.demo.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +21,12 @@ public class User {
     @Field(name="_id")
     private ObjectId id;
     private String userId;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String passwd;
     private String nickname;
     private List<ObjectId> channelList;
     private List<ObjectId> studyList;
     private List<ObjectId> todoList;
     private String accessKey;
+    private String discordId;
 }
