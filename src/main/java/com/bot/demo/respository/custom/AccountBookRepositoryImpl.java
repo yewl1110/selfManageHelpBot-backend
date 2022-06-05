@@ -33,7 +33,7 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
             Query query = new Query();
             query.with(Sort.by(Sort.Direction.DESC, "date"));
             query.addCriteria(new Criteria().andOperator(
-               Criteria.where("user").is(user.getId()), Criteria.where("date").gte(startDate).lte(endDate)
+               Criteria.where("user").is(user.getId()), Criteria.where("date").gte(startDate).lt(endDate.plusDays(1))
             ));
             result = mongoTemplate.find(query, AccountBook.class);
         } catch (Exception e) {
