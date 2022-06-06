@@ -36,5 +36,5 @@ public class AccountBook {
     private DateTime date;
     private Integer accountId;
     @Pattern(regexp = "^\\d+[dwmy]$")
-    private String fixedDuration = "1m";
+    private String fixedDuration;
 }
