@@ -1,8 +1,10 @@
 package com.bot.demo.vo;
 
 import com.bot.demo.annotation.PatchIgnore;
+import com.bot.demo.util.DateTimeDeserializer;
 import com.bot.demo.util.DateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +35,7 @@ public class AccountBook {
     private String category;
     private String content;
     @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime date;
     private Integer accountId;
     @Pattern(regexp = "^\\d+[dwmy]$")
