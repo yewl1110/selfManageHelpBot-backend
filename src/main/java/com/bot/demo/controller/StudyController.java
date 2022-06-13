@@ -14,6 +14,6 @@ public class StudyController {
 
     @PostMapping("time")
     Map<String, Object> studyTimeByDate(@RequestBody Map<String, Object> param) {
-        return studyService.getStudyByDate(param);
+        return studyService.getStudyTimeByDate(param);
     }
 }

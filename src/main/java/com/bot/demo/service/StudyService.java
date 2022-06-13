@@ -60,7 +60,7 @@ public class StudyService {
 
             User user = usersRepository.findByUserId(userId);
             DateTime startDate = DateTime.parse(dateStr);
-            DateTime endDate = startDate.plusDays(count);
+            DateTime endDate = startDate.plusDays(count - 1);
 
             list = studyRepository.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), startDate, endDate);
 

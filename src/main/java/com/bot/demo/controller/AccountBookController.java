@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,13 +41,15 @@ public class AccountBookController {
     }
 
     @PatchMapping("")
-    Map<String, Object> update(@RequestBody AccountBook accountBook) {
-        return accountBookService.update(accountBook);
+    Map<String, Object> update(String userId, @RequestBody AccountBook accountBook) {
+        return new HashMap<>();
+//        return accountBookService.update(accountBook);
     }
 
     @GetMapping("fixedList")
     List<AccountBook> fixedList(@RequestParam("userId")String userId) {
         return accountBookService.fixedAccountBookList(userId);
     }
+
 
 }
