@@ -86,13 +86,15 @@ public class AccountBookService {
     }
 
 
-    public Map<String, Object> update(AccountBook accountBook) {
+    public Map<String, Object> updateByUserId(AccountBook accountBook, String userId) {
         Map<String, Object> result = new HashMap<>();
         int code = 0;
 
         try {
-            accountBookRepository.update(accountBook);
-            code = 1;
+            User user = usersRepository.findByUserId(userId);
+            if(accountBookRepository.update(accountBook, user) > 0) {
+                code = 1;
+            };
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         } finally {

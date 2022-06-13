@@ -41,9 +41,8 @@ public class AccountBookController {
     }
 
     @PatchMapping("")
-    Map<String, Object> update(String userId, @RequestBody AccountBook accountBook) {
-        return new HashMap<>();
-//        return accountBookService.update(accountBook);
+    Map<String, Object> update(@RequestBody AccountBook accountBook, String userId) {
+        return accountBookService.updateByUserId(accountBook, userId);
     }
 
     @GetMapping("fixedList")

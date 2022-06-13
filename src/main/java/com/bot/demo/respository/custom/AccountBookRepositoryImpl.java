@@ -57,11 +57,14 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
 
 
     @Override
-    public int update(AccountBook accountBook) {
+    public int update(AccountBook accountBook, User user) {
         int result = 0;
 //        db.todos.updateOne({todoId:1}, {$set:{isCompleted: true}})
         try {
-            Query query = new Query(Criteria.where("accountId").is(accountBook.getAccountId()));
+            Query query = new Query();
+            query.addCriteria(new Criteria().andOperator(
+                    Criteria.where("user").is(user.getId()), (Criteria.where("accountId").is(accountBook.getAccountId()))
+            ));
 
             Update update = new Update();
             Class<?> clazz = accountBook.getClass();
@@ -76,8 +79,7 @@ public class AccountBookRepositoryImpl implements AccountBookRepository{
                 }
             }
             mongoTemplate.find(query, AccountBook.class);
-            mongoTemplate.updateFirst(query, update, AccountBook.class);
-            result = 1;
+            result = (int)mongoTemplate.updateFirst(query, update, AccountBook.class).getModifiedCount();
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         }
