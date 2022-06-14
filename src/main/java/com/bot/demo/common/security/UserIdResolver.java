@@ -1,6 +1,7 @@
 package com.bot.demo.common.security;
 
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+
+import org.json.JSONObject;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
