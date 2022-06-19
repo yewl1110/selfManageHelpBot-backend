@@ -1,14 +1,15 @@
 package com.bot.demo.controller;
 
+import com.bot.demo.controller.vo.UserAccount;
 import com.bot.demo.service.UserService;
 import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,8 +17,25 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("")
-    public Map<String, Object> login(@RequestBody User user) {
-        return userService.getUser(user);
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody User user) {
+        ResponseEntity<User> result;
+        User loginUser = userService.getUser(user);
+        if(ObjectUtils.isEmpty(loginUser)) {
+            result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } else {
+            result = ResponseEntity.ok(loginUser);
+        }
+        return result;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity signup(@Valid @RequestBody UserAccount user) {
+        return ResponseEntity.ok(userService.signup(user));
+    }
+
+    @GetMapping("/checkUserId")
+    public ResponseEntity checkUserId(String userId) {
+        return ResponseEntity.ok(userService.checkUserId(userId));
     }
 }
