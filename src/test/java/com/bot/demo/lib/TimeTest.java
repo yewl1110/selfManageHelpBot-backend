@@ -1,21 +1,17 @@
-package com.bot.demo;
+package com.bot.demo.lib;
 
-import com.bot.demo.service.StudyService;
+import com.bot.demo.util.type.Days;
 import com.bot.demo.util.TimeUtils;
-import com.bot.demo.vo.Study;
 import org.joda.time.DateTime;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@SpringBootTest
 public class TimeTest {
-    @Autowired StudyService studyService;
     @Test
     public void strToTime() {
         String dateStr = "2022-05-05";
@@ -60,23 +56,23 @@ public class TimeTest {
     }
 
     @Test
-    public void timeDiffer() {
-        String startTimeStr = "2022-04-02";
-        DateTime startTime = DateTime.parse(startTimeStr);
-        int result = TimeUtils.timeDifferMinute(startTime, startTime.plusHours(59));
-        int result2 = TimeUtils.timeDifferMinute(startTime, startTime.plusHours(59).plusMillis(1000*60*5));
-        System.out.println(result);
-        System.out.println(result2);
-
-
-        Study study = new Study();
-        study.setStartDate(DateTime.parse("2022-05-05T01:12:05"));
-        study.setEndDate(DateTime.parse("2022-05-06T08:12:05"));
-        System.out.println(studyService.studyTimeMap(study));
-
-
-        study.setStartDate(DateTime.parse("2022-05-05T01:12:05"));
-        study.setEndDate(DateTime.parse("2022-05-05T08:12:05"));
-        System.out.println(studyService.studyTimeMap(study));
+    void daysOfWeek() {
+        int week = 3;
+        DateTime now = DateTime.now();
+        System.out.println(now.plusDays(-1).dayOfWeek().get()); // 1~7 월~일
+        List<Object> list = new ArrayList<>();
+        List<String> days = new ArrayList<>();
+        for(int i = 0; i < week; i++) {
+            List<DateTime> subList = new ArrayList<>();
+            subList.addAll(TimeUtils.dateBeforeTimes(now.plusDays(-7*i), 7));
+            list.add(subList);
+        }
+        for(DateTime dateTime : (List<DateTime>)list.get(0)) {
+            int dayValue = dateTime.getDayOfWeek();
+            days.add(Days.getDaysByValue(dayValue).KOR);
+        }
+        Collections.reverse(list);
+        System.out.println(list);
+        System.out.println(days);
     }
 }

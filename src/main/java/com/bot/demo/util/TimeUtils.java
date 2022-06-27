@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TimeUtils {
@@ -20,6 +21,19 @@ public class TimeUtils {
             result.add(startIdxDate.plusDays(i));
         }
 
+        return result;
+    }
+
+    public static List<DateTime> dateBeforeTimes(DateTime startDate,@Positive int count) {
+        List<DateTime> result = new ArrayList<>();
+
+        String startDateStr = startDate.toString().split("T")[0];
+        DateTime startIdxDate = DateTime.parse(startDateStr);
+
+        for(int i = 0; i < count; i++) {
+            result.add(startIdxDate.plusDays(i*-1));
+        }
+        Collections.reverse(result);
         return result;
     }
 

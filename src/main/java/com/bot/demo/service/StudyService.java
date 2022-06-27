@@ -2,7 +2,9 @@ package com.bot.demo.service;
 
 import com.bot.demo.respository.StudiesRepo;
 import com.bot.demo.respository.UsersRepo;
+import com.bot.demo.util.DataUtils;
 import com.bot.demo.util.TimeUtils;
+import com.bot.demo.util.type.Days;
 import com.bot.demo.vo.Study;
 import com.bot.demo.vo.User;
 import lombok.RequiredArgsConstructor;
@@ -64,18 +66,9 @@ public class StudyService {
 
             list = studyRepository.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), startDate, endDate);
 
-
-            Map<String, Integer> dateSet = new HashMap<>();
             List<DateTime> dateList = TimeUtils.dateTimes(startDate, endDate);
-            dateList.forEach(date -> {
-                dateSet.put(TimeUtils.getDateStr(date), 0);
-            });
+            Map<String, Integer> dateSet = studyListToStudyTimeMap(dateList, list);
 
-            List<Map<String, Integer>> flatData = list.stream().map(this::studyTimeMap).collect(Collectors.toList());
-            for(String date : dateSet.keySet()) {
-                Optional<Integer> minute = flatData.stream().filter(e-> e.containsKey(date)).map(e->e.get(date)).reduce(Integer::sum);
-                dateSet.put(date, minute.orElse(0));
-            }
             result.put("data", dateSet);
         } catch (Exception e) {
 
@@ -84,7 +77,62 @@ public class StudyService {
         return result;
     }
 
-    public Map<String, Integer> studyTimeMap(Study study) {
+    /**
+     * ..n주까지 (4주아니면8주)
+     * 4주
+     * 3주
+     * 2주
+     * 1주                    -2일 -1일 오늘
+     *       목  금   토   일   월   화   수
+     *                                (오늘요일)
+     * */
+    public Map<String, Object> getWeeksTimeData(String userId, int week) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            User user = usersRepository.findByUserId(userId);
+            DateTime startDate = DateTime.now().plusDays(-1);
+            DateTime endDate = startDate.plusDays(week * 7 * -1);
+            List<Object> weekList = new ArrayList<>();
+            List<String> days = new ArrayList<>();
+
+            for(int i = 0; i < week; i++) {
+                List<DateTime> subList = new ArrayList<>();
+                subList.addAll(TimeUtils.dateBeforeTimes(startDate.plusDays(-7*i), 7));
+                List<Study> dataList = studyRepository.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), subList.get(0), subList.get(subList.size()-1));
+                Map<String, Integer> studyTimeMap = studyListToStudyTimeMap(subList, dataList);
+                weekList.add(DataUtils.sortMapByKey(studyTimeMap));
+            }
+            Collections.reverse(weekList);
+
+            for(DateTime dateTime : TimeUtils.dateBeforeTimes(startDate.plusDays(-7), 7)) {
+                int dayValue = dateTime.getDayOfWeek();
+                days.add(Days.getDaysByValue(dayValue).KOR);
+            }
+
+            result.put("data", weekList);
+            result.put("dayLabel", days);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private Map<String, Integer> studyListToStudyTimeMap(List<DateTime> dayList, List<Study> dataList) {
+        Map<String, Integer> dateSet = new HashMap<>();
+        dayList.forEach(date -> {
+            dateSet.put(TimeUtils.getDateStr(date), 0);
+        });
+
+        List<Map<String, Integer>> flatData = dataList.stream().map(this::studyTimeMap).collect(Collectors.toList());
+        for(String date : dateSet.keySet()) {
+            Optional<Integer> minute = flatData.stream().filter(e-> e.containsKey(date)).map(e->e.get(date)).reduce(Integer::sum);
+            dateSet.put(date, minute.orElse(0));
+        }
+
+        return dateSet;
+    }
+
+    private Map<String, Integer> studyTimeMap(Study study) {
         Map<String, Integer> result = new HashMap<>();
 
         List<DateTime> list = TimeUtils.dateTimes(study.getStartDate(), study.getEndDate());
