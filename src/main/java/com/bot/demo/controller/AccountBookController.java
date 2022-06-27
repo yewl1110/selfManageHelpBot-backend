@@ -41,7 +41,7 @@ public class AccountBookController {
     }
 
     @PatchMapping("")
-    Map<String, Object> update(@RequestBody AccountBook accountBook, String userId) {
+    Map<String, Object> update(@Valid @RequestBody AccountBook accountBook, String userId) {
         return accountBookService.updateByUserId(accountBook, userId);
     }
 

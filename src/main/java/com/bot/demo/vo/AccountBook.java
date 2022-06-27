@@ -11,9 +11,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.constraints.Pattern;
 
@@ -38,6 +40,14 @@ public class AccountBook {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime date;
     private Integer accountId;
-    @Pattern(regexp = "^\\d+[dwmy]$")
+    @Pattern(regexp = "(^$|^\\d+([dwmy]|md)$)")
     private String fixedDuration;
+
+    public void setFixedDuration(String fixedDuration) {
+        if(ObjectUtils.isEmpty(fixedDuration)) {
+            this.fixedDuration = "1m";
+        } else {
+            this.fixedDuration = fixedDuration;
+        }
+    }
 }
