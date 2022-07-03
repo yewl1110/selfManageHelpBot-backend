@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -52,6 +54,9 @@ public class UserService {
                     .nickname(userAccount.getNickname())
                     .passwd(userAccount.getEncryptedPasswd())
                     .discordId(userAccount.getDiscordId())
+                    .channelList(new ArrayList<>())
+                    .studyList(new ArrayList<>())
+                    .todoList(new ArrayList<>())
                     .build();
             newMember = userRepository.insert(user);
 

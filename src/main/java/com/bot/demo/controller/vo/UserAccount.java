@@ -20,7 +20,7 @@ public class UserAccount {
     @Pattern(regexp = "^[A-z0-9가-힣]{2,10}$")
     private String nickname;
     @Nullable
-    @Pattern(regexp = "^[0-9]{18}$")
+    @Pattern(regexp = "^$|^[0-9]{18}$")
     private String discordId;
 
     public String getEncryptedPasswd() {

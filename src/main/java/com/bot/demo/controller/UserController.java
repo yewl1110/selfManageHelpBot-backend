@@ -1,5 +1,6 @@
 package com.bot.demo.controller;
 
+import com.bot.demo.controller.vo.SimpleMessageDTO;
 import com.bot.demo.controller.vo.UserAccount;
 import com.bot.demo.service.UserService;
 import com.bot.demo.vo.User;
@@ -31,11 +32,12 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody UserAccount user) {
+//        return ResponseEntity.ok(SimpleMessageDTO.builder().code(1).msg("회원가입 성공").build());
         return ResponseEntity.ok(userService.signup(user));
     }
 
     @GetMapping("/checkUserId")
-    public ResponseEntity checkUserId(String userId) {
+    public ResponseEntity checkUserId(@RequestParam("userId") String userId) {
         return ResponseEntity.ok(userService.checkUserId(userId));
     }
 }

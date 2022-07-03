@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 
 public class UserIdResolver implements HandlerMethodArgumentResolver {
     @Override
