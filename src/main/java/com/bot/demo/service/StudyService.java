@@ -98,7 +98,7 @@ public class StudyService {
             for(int i = 0; i < week; i++) {
                 List<DateTime> subList = new ArrayList<>();
                 subList.addAll(TimeUtils.dateBeforeTimes(startDate.plusDays(-7*i), 7));
-                List<Study> dataList = studyRepository.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), subList.get(0), subList.get(subList.size()-1));
+                List<Study> dataList = studyRepository.findAllByOwnerAndEndDateAfterAndStartDateBefore(user.getId(), subList.get(0), subList.get(subList.size()-1).plusDays(1));
                 Map<String, Integer> studyTimeMap = studyListToStudyTimeMap(subList, dataList);
                 weekList.add(DataUtils.sortMapByKey(studyTimeMap));
             }
