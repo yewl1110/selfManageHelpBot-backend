@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +55,7 @@ public class AccountBookService {
         return accountBookRepository.findById(accountId).orElse(new AccountBook());
     }
 
-    public Map<String, Object> insert(AccountBook accountBook) {
+    public Map<String, Object> insert(AccountBook accountBook, String userId) {
         Map<String, Object> result = new HashMap<>();
         AccountBook insAccountBook = new AccountBook();
         int code = 0;
@@ -66,8 +63,13 @@ public class AccountBookService {
         try {
             Counter counter = countersRepository.sequence("AccountBook");
             accountBook.setAccountId(counter.getSeq_value());
-            insAccountBook = accountBookRepository.insert(accountBook);
-            code = 1;
+
+            User user = usersRepository.findByUserId(userId);
+            if(!ObjectUtils.isEmpty(user)) {
+                accountBook.setUser(user.getId());
+                insAccountBook = accountBookRepository.insert(accountBook);
+                code = 1;
+            }
         } catch (Exception e) {
             log.error("{}",e.getMessage());
         } finally {
@@ -80,7 +82,7 @@ public class AccountBookService {
             }
             result.put("code", code);
             result.put("msg", msg);
-            result.put("accountId", insAccountBook.getAccountId());
+            result.put("accountId", Optional.ofNullable(insAccountBook).orElseGet(AccountBook::new).getAccountId());
         }
         return result;
     }
@@ -112,14 +114,13 @@ public class AccountBookService {
     }
 
 
-    public Map<String, Object> delete(Map<String, Object> params) {
+    public Map<String, Object> delete(Map<String, Object> params, String userId) {
         Map<String, Object> result = new HashMap<>();
         int code = 0;
 
         try {
-            String userId = String.valueOf(params.get("userId"));
-            Integer accountId = (int)params.get("accountId");
             User user = usersRepository.findByUserId(userId);
+            Integer accountId = (int)params.get("accountId");
             AccountBook delCheck = accountBookRepository.findFirstByAccountIdAndUser(accountId, user.getId());
             if(!ObjectUtils.isEmpty(delCheck)){
                 accountBookRepository.deleteAccountBookByAccountIdAndUser(accountId, user.getId());

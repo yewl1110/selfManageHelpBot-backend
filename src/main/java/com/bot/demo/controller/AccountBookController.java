@@ -31,13 +31,13 @@ public class AccountBookController {
     }
 
     @PostMapping("")
-    Map<String, Object> insert(@Valid @RequestBody AccountBook accountBook) {
-        return accountBookService.insert(accountBook);
+    Map<String, Object> insert(@Valid @RequestBody AccountBook accountBook, String userId) {
+        return accountBookService.insert(accountBook, userId);
     }
 
     @DeleteMapping("")
-    Map<String, Object> delete(@RequestBody Map<String, Object> params) {
-        return accountBookService.delete(params);
+    Map<String, Object> delete(@RequestBody Map<String, Object> params, String userId) {
+        return accountBookService.delete(params, userId);
     }
 
     @PatchMapping("")
