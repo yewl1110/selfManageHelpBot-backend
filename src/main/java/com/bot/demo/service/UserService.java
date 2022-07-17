@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -89,5 +90,9 @@ public class UserService {
 
         }
         return result;
+    }
+
+    public User getUser(String userId) {
+        return Optional.of(userRepository.findByUserId(userId)).get();
     }
 }

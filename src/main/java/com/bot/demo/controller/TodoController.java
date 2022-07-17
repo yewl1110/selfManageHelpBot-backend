@@ -1,44 +1,53 @@
 package com.bot.demo.controller;
 
+import com.bot.demo.controller.vo.SimpleMessageDTO;
 import com.bot.demo.service.TodoService;
 import com.bot.demo.vo.Todo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/todo")
 public class TodoController {
-    @Autowired
-    TodoService todoService;
+    final private TodoService todoService;
 
-
-    @GetMapping("/{todoId}")
-    public Todo getTodoById(@PathVariable(value = "todoId") String todoId) {
-        return todoService.getTodoById(todoId);
+    @GetMapping("")
+    ResponseEntity<List<Todo>> todoList(@RequestParam("userId") String userId) {
+        return ResponseEntity.ok(todoService.todoList(userId));
     }
 
-    @PostMapping("/list")
-    public Map<String, Object> getTodoList(@RequestBody Map<String, Object> params) {
-        return todoService.getTodoList(params);
+    @GetMapping("/complete")
+    ResponseEntity<SimpleMessageDTO> todoComplete(@RequestParam("userId") String userId, @RequestParam("todoId") Integer todoId) {
+        SimpleMessageDTO messageDTO;
+        long result = todoService.todoComplete(userId, todoId);
+        if(result > 0) {
+            messageDTO = SimpleMessageDTO.getDefaultSuccess();
+        } else {
+            messageDTO = SimpleMessageDTO.getDefaultFailed();
+        }
+        return ResponseEntity.ok(messageDTO);
     }
 
     @PostMapping("")
-    public Todo insTodo(@RequestBody Todo todo) {
-
-        return todoService.insertTodo(todo);
-    }
-
-    @PatchMapping("")
-    public int updTodo(@RequestBody Todo todo) {
-        todoService.updateTodo(todo);
-        return 1;
+    ResponseEntity<Todo> addTodo(@RequestBody @Valid Todo todo, String userId) {
+        return ResponseEntity.ok(todoService.add(todo, userId));
     }
 
     @DeleteMapping("")
-    public int delTodo(@RequestBody Todo todo) {
-        todoService.deleteTodo(todo);
-        return 1;
+    ResponseEntity<SimpleMessageDTO> removeTodo(@RequestParam("userId") String userId, @RequestParam("todoId") Integer todoId) {
+        SimpleMessageDTO messageDTO;
+        if(todoService.remove(userId, todoId)) {
+            messageDTO = SimpleMessageDTO.getDefaultSuccess();
+        } else {
+            messageDTO = SimpleMessageDTO.getDefaultFailed();
+        }
+        return ResponseEntity.ok(messageDTO);
     }
 }
