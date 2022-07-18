@@ -71,8 +71,7 @@ public class TodoService {
     private Todo createTodo(Todo todo) {
         return Todo.builder()
                 .todoId(todo.getTodoId())
-                .title(todo.getTitle())
-                .content(Optional.ofNullable(todo.getContent()).orElse(""))
+                .content(todo.getContent())
                 .isCompleted(Optional.ofNullable(todo.getIsCompleted()).orElse(false))
                 .proceed(Optional.ofNullable(todo.getProceed()).orElse(0))
                 .insDate(Optional.ofNullable(todo.getInsDate()).orElse(LocalDateTime.now()))

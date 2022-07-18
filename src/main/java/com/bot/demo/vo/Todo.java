@@ -23,10 +23,8 @@ public class Todo {
     @Field(name="_id")
     @JsonIgnore
     private ObjectId id;
-    @Size(min = 5, max=30)
+    @Size(min = 5, max=100)
     @NotBlank
-    private String title;
-    @Size(max=100)
     private String content;
     private Boolean isCompleted;
     @JsonIgnore
